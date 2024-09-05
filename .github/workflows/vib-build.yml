@@ -22,7 +22,7 @@ jobs:
       run:
         gh attestation verify oci://ghcr.io/guztaver/vanilla-gu:latest --owner guztaver
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        GH_TOKEN: ${{ secrets.TOKEN }}
 
   build:
     runs-on: ubuntu-latest
