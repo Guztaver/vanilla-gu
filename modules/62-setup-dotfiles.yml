@@ -1,12 +1,4 @@
 name: setup-dotfiles
 type: shell
 commands:
-  - apt-get install neovim emacs kitty fish rust
-  - apt-get install git
-  - cargo install kanata
-  - git clone https://codeberg.org/guztaver/dotfiles /tmp/
-  - mkdir /usr/local/configs -p
-  - mv /tmp/dotfiles/.config/kanata/* /usr/local/configs
-  - mv /tmp/dotfiles/.config/* $HOME/.config
-  - mv /tmp/dotfiles/.emacs.d $HOME
-  - rm /tmp/dotfiles*;
+  - git clone https://codeberg.org/guztaver/dotfiles /tmp/dotfiles

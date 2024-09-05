@@ -1,0 +1,14 @@
+name: install-dotfiles-packages
+type: apt
+source:
+  packages:
+    - emacs
+    - kitty
+    - fish
+    - git
+    - wget
+    - neovim
+  options:
+    installSuggestions: true
+    fixMissing: true
+    fixBroken: true

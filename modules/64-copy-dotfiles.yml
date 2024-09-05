@@ -1,0 +1,4 @@
+name: copy-dotfiles
+type: shell
+commands:
+  - mv /tmp/dotfiles/.config/kanata/* /usr/local/configs

@@ -1,0 +1,7 @@
+name: setup-kanta
+type: shell
+commands:
+  - mkdir -p /usr/local/bin
+  - mkdir -p /usr/local/configs
+  - wget -O /usr/local/bin/kanata https://github.com/jtroo/kanata/releases/latest/download/kanata
+  - chmod +x /usr/local/bin/kanata

@@ -16,11 +16,16 @@ stages:
     - lpkg --unlock
     - apt-get update
 
-  - name: modules
+  - name: package-modules
     type: includes
     includes:
+      - modules/60-install-dotfiles-packages.yml
       - modules/61-setup-tailscale.yml
       - modules/62-setup-dotfiles.yml
+      - modules/63-setup-kanata.yml
+      - modules/64-copy-dotfiles.yml
+      - modules/80-set-image-abroot-config.yml
+      - modules/999-clean-packages.yml
 
   - name: cleanup
     type: shell
