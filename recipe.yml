@@ -2,15 +2,12 @@ name: Vanilla Gu
 id: vanilla-gu
 stages:
 - id: build
-  base: ghcr.io/vanilla-os/desktop:main 
+  base: ghcr.io/vanilla-os/desktop:main
   singlelayer: false
   labels:
     maintainer: guztaver
   args:
     DEBIAN_FRONTEND: noninteractive
-  
-  runs:
-  - echo 'APT::Install-Recommends "1";' > /etc/apt/apt.conf.d/01norecommends
 
   modules:
   - name: init-setup
@@ -19,19 +16,11 @@ stages:
     - lpkg --unlock
     - apt-get update
 
-  - name: modules 
+  - name: modules
     type: includes
     includes:
-      - modules/50-install-debs.yml
-      - modules/51-setup-tailscale.yml
-      - modules/52-setup-dotfiles.yml
-      - gh:vanilla-os/dev-image:main:modules/00-basics.yml
-      - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml
-
-  - name: set-image-name-abroot
-    type: includes
-    includes:
-      - modules/80-set-image-abroot-config.yml
+      - modules/61-setup-tailscale.yml
+      - modules/62-setup-dotfiles.yml
 
   - name: cleanup
     type: shell
