@@ -23,26 +23,10 @@ stages:
     type: includes
     includes:
       - modules/50-install-debs.yml
+      - modules/51-setup-tailscale.yml
+      - modules/52-setup-dotfiles.yml
       - gh:vanilla-os/dev-image:main:modules/00-basics.yml
       - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml
-
-  - name: install-tailscale
-    type: shell
-    commands:
-    - mkdir -p --mode=0755 /usr/share/keyrings
-    - curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-    - curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list
-    - apt-get update && apt-get install -y tailscale
-
-  - name: setup-dotfiles
-    type: shell
-    commands:
-    - apt-get install neovim emacs kitty
-    - apt-get install git
-    - git clone https://codeberg.org/guztaver/dotfiles /tmp/
-    - mv /tmp/dotfiles/.config/* $HOME/.config
-    - mv /tmp/dotfiles/.emacs.d $HOME
-    - rm /tmp/dotfiles*;
 
   - name: set-image-name-abroot
     type: includes
@@ -55,20 +39,6 @@ stages:
     - apt-get autoremove -y
     - apt-get clean
     - lpkg --lock
-
-  - name: fsguard
-    type: fsguard
-    CustomFsGuard: false
-    FsGuardLocation: "/usr/sbin/FsGuard"
-    GenerateKey: true
-    FilelistPaths: ["/usr/bin"]
-    modules:
-      - name: remove-prev-fsguard
-        type: shell
-        commands:
-          - rm -rf /FsGuard 
-          - rm -f ./minisign.pub ./minisign.key 
-          - chmod +x /usr/sbin/init
 
   - name: cleanup2
     type: shell
