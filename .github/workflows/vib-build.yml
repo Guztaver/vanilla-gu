@@ -20,9 +20,9 @@ jobs:
     steps:
     - name: Verify Base Image Integrity
       run:
-        gh attestation verify oci://ghcr.io/guztaver/vanilla-gu:latest --owner guztaver
+        gh attestation verify oci://ghcr.io/guztaver/vanilla-gu:main --owner Guztaver
       env:
-        GH_TOKEN: ${{ secrets.TOKEN }}
+        GH_TOKEN: ${{ github.token }}
 
   build:
     runs-on: ubuntu-latest
