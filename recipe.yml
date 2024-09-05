@@ -1,15 +1,14 @@
-name: Custom Vanilla Desktop # Replace this name with your image name
-id: custom-test # Replace this ID with your image ID
+name: Vanilla Gu
+id: vanilla-gu
 stages:
 - id: build
-  base: ghcr.io/vanilla-os/desktop:main # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
+  base: ghcr.io/vanilla-os/desktop:main 
   singlelayer: false
   labels:
-    maintainer: self-maintained # Optionally, Replace this with your name
+    maintainer: guztaver
   args:
-    DEBIAN_FRONTEND: noninteractive # Set the image environment as non-interactive
+    DEBIAN_FRONTEND: noninteractive
   
-  # Commands to run first before building the modules
   runs:
   - echo 'APT::Install-Recommends "1";' > /etc/apt/apt.conf.d/01norecommends
 
@@ -20,39 +19,14 @@ stages:
     - lpkg --unlock
     - apt-get update
 
-  # Put your custom actions behind this comment
-  - name: modules # Sample module demonstrating importing local and remote modules
+  - name: modules 
     type: includes
     includes:
-      - modules/50-install-debs.yml # Sample local module present in this repository
-      - gh:vanilla-os/dev-image:main:modules/00-basics.yml # Sample GitHub remote module in the format: `gh:your-name/your-repo:branch:modules/file.yml`
-      - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml # Sample full URL remote module
-      
-  - name: libvirt-packages
-    type: apt
-    source:
-      packages:
-      - qemu-kvm
-      - libvirt-daemon
-      - bridge-utils
-      - virtinst
-      - libvirt-daemon-system
-      #- libguestfs-tools
-      - libosinfo-bin
-      - qemu-system
-      - virt-manager
+      - modules/50-install-debs.yml
+      - gh:vanilla-os/dev-image:main:modules/00-basics.yml
+      - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml
 
-  - name: lookingglass-packages
-    type: apt
-    source:
-      packages:
-      - libxpresent1
-      - libbinutils
-      - dkms
-
-
-
-  - name: install-tailscale # Sample module demonstrating the Shell module with custom commands
+  - name: install-tailscale
     type: shell
     commands:
     - mkdir -p --mode=0755 /usr/share/keyrings
@@ -60,9 +34,15 @@ stages:
     - curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list
     - apt-get update && apt-get install -y tailscale
 
-
-
-  # Put your custom actions before this comment
+  - name: setup-dotfiles
+    type: shell
+    commands:
+    - apt-get install neovim emacs kitty
+    - apt-get install git
+    - git clone https://codeberg.org/guztaver/dotfiles /tmp/
+    - mv /tmp/dotfiles/.config/* $HOME/.config
+    - mv /tmp/dotfiles/.emacs.d $HOME
+    - rm /tmp/dotfiles*;
 
   - name: set-image-name-abroot
     type: includes
